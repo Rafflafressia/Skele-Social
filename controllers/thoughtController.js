@@ -1,5 +1,5 @@
 // import Thought model
-const Thought = require('../models/Thought');
+const {Thought, User} = require('../models');
 
 module.exports = thoughtController = {
     // get all thoughts
@@ -34,6 +34,8 @@ module.exports = thoughtController = {
     async createThought(req, res) {
         try {
             const thought = await Thought.create(req.body);
+            const user = await User.findOne({username: req.body.username});
+            user.thoughts.push(thought._id);
             res.json(thought);
         } catch (err) {
             console.log(err);
